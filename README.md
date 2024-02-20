@@ -7,10 +7,16 @@ The dashboard/web app is created using Dash. This framework builds a web page gi
 
 Data is grouped by sector (technology, real estate, finance, etc.)
 
-The dashboard has two rows. The top row contains the title with an "Update" button, a dropdown menu, and two visualizations. Clicking the Update button will fetch new, real time stocks data and regenerate the visualizations. 
-The dropdown menu allows the user to select a Sector to filter the data by. The first visualization is a list of the 10 largest companies in the given sector. The second is a treemap which displays the proportional market weights of all the industries within the sector. The data for this row is scraped.
+The dashboard has two rows. The top row contains the title with an "Update" button, a dropdown menu, and two visualizations. <br>
+Clicking the Update button will fetch new, real time stocks data and regenerate the visualizations. <br>
+The dropdown menu allows the user to select a Sector to filter the data by. <br>
+The first visualization is a list of the 10 largest companies in the given sector. <br>
+The second is a treemap which displays the proportional market weights of all the industries within the sector. <br>
+The data for this row is scraped.
 
-The bottom row contains three histograms. These display the distributions for price, price percent change, and volume among the tickers within the sector. 
+The bottom row contains three histograms. <br>
+These display the distributions for price, price percent change, and volume among the tickers within the sector. <br>
+The data for this row comes via API. 
 
 
 # To Do
