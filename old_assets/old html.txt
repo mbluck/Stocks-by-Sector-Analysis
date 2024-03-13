@@ -1,0 +1,84 @@
+app.layout = html.Div([
+    
+    html.Div([
+
+        html.Div([
+
+            html.Div([
+                html.H5("Title", style={"margin-top": "0px", 'color': 'white'}),
+            ], id='title'),
+
+            html.Div([
+                html.Button('Update', id='update'),
+                html.Div(id='container-button-basic')
+            ], id='button'),
+
+            html.Div([
+                html.H6('Last Updated: ' + time_updated,
+                    style={'color': 'white'}),
+            ], id='title1')
+
+        ], className="title-container", style={"margin-bottom": "25px"}),
+
+        html.Div([
+            html.Div([html.P('Select Sector:', className='subheading')]),
+
+                     dcc.Dropdown(id='dropdown',
+                                  multi=False,
+                                  clearable=True,
+                                  value='Technology',
+                                  placeholder='Select Sector',
+                                  options=[{'label': c, 'value': c}for c in (tree_data['Sector'].unique())], 
+                                  className='dcc_compon'),
+
+            html.Div([html.P('10 Largest Companies', className='heading', style={"margin-top": "25px"})]),
+
+                     dcc.Graph(id='companies_list', 
+                               config={'displayModeBar': False}, 
+                               className='dcc_compon'),
+
+                    ], className="container"),
+
+        html.Div([
+                    html.P('Market Weights of Industries within Sector (%)', className='heading',  style={'color': 'white', 'text-align': 'center'}),
+
+                     dcc.Graph(id='treemap', 
+                               config={'displayModeBar': 'hover'}, 
+                               className='dcc_compon', 
+                               style={'margin-top': '20px'})
+
+                ], className="container"),
+
+    ], className="top-row", id='top_row'),
+
+    html.Div([
+        html.Div([
+                    html.P('Stock Prices', className='heading'),
+
+                     dcc.Graph(id='price', 
+                               config={'displayModeBar': False}, 
+                               className='dcc_compon', 
+                               style={'margin-top': '20px'}),
+
+                    ], className="create_container four columns"),
+        html.Div([
+                    html.P('Price Percent Change', className='heading'),
+
+                     dcc.Graph(id='per_change', 
+                               config={'displayModeBar': False}, 
+                               className='dcc_compon', 
+                               style={'margin-top': '20px'}),
+
+                    ], className="create_container four columns"),
+        html.Div([
+                    html.P('Stock Volume (Millions)', className='heading'),
+
+                     dcc.Graph(id='volume', 
+                               config={'displayModeBar': False}, 
+                               className='dcc_compon', 
+                               style={'margin-top': '20px'}),
+
+                    ], className="create_container four columns"),
+   
+    ], className="row flex-display")
+])

@@ -18,90 +18,74 @@ stocks = pd.read_csv('default_data/stock_data.csv')
 app = Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 
 app.layout = html.Div([
-    
-    html.Div([
 
-        html.Div([
+	html.Header(
+		html.H1("Aggregate Stock Data by Sector")
+	),
+	
+	html.Main([
+		html.Div([
+			html.Div([
+				html.Button("Update Data", id="button"),
+				html.Div("Last Updated:", id="last_update")
+			], id="button_content")
+		], id="button_bar"),
+		
+		html.Div([
+			html.Div([
+				html.H2("10 Largest Companies", className="plot_header"),
+				dcc.Dropdown(id='select_sector',
+                            multi=False,
+                            clearable=True,
+                            value='Technology',
+                            placeholder='Select Sector',
+                            options=[{'label': c, 'value': c}for c in (tree_data['Sector'].unique())], 
+                            className='dropdown'),
+                dcc.Graph(id='companies_list', 
+                          config={'displayModeBar': False}, 
+                          className='plotly_elem')
+			], id="list"),
+			html.Div([
+				html.H2("Market Weights of Industries within Sector (%)", className="plot_header"),
+				dcc.Graph(id='sector_treemap', 
+                          config={'displayModeBar': 'hover',
+                                  "responsive": True}, 
+                          style={'width': '95%', 'height': '87%'},
+                          className='plotly_elem')
+			], id="treemap"),
+		], className="row", id="row1"),
+		
+		html.Div([
+			html.Div([
+				html.H2("Price", className="plot_header"),
+				dcc.Graph(id='price', 
+                            config={'displayModeBar': False,
+                                    "responsive": True}, 
+                            style={'width': '95%', 'height': '92%'},
+                            className="plotly_elem")
+			], className="histogram"),
+			html.Div([
+				html.H2("Price Percent Change", className="plot_header"),
+				dcc.Graph(id='per_change', 
+                            config={'displayModeBar': False,
+                                    "responsive": True}, 
+                            style={'width': '95%', 'height': '92%'},
+                            className="plotly_elem")
+			], className="histogram"),
+			html.Div([
+				html.H2("Stock Volume", className="plot_header"),
+				dcc.Graph(id='volume', 
+                            config={'displayModeBar': False,
+                                    "responsive": True}, 
+                            style={'width': '95%', 'height': '92%'},
+                            className="plotly_elem")
+			], className="histogram")
+		], className="row", id="row2")
+	]),
+	
+	html.Footer()
 
-            html.Div([
-                html.H5("Title", style={"margin-top": "0px", 'color': 'white'}),
-            ], id='title'),
-
-            html.Div([
-                html.Button('Update', id='update'),
-                html.Div(id='container-button-basic')
-            ], id='button'),
-
-            html.Div([
-                html.H6('Last Updated: ' + time_updated,
-                    style={'color': 'white'}),
-            ], id='title1')
-
-        ], className="title-container", style={"margin-bottom": "25px"}),
-
-        html.Div([
-            html.Div([html.P('Select Sector:', className='subheading')]),
-
-                     dcc.Dropdown(id='dropdown',
-                                  multi=False,
-                                  clearable=True,
-                                  value='Technology',
-                                  placeholder='Select Sector',
-                                  options=[{'label': c, 'value': c}for c in (tree_data['Sector'].unique())], 
-                                  className='dcc_compon'),
-
-            html.Div([html.P('10 Largest Companies', className='heading', style={"margin-top": "25px"})]),
-
-                     dcc.Graph(id='companies_list', 
-                               config={'displayModeBar': False}, 
-                               className='dcc_compon'),
-
-                    ], className="container"),
-
-        html.Div([
-                    html.P('Market Weights of Industries within Sector (%)', className='heading',  style={'color': 'white', 'text-align': 'center'}),
-
-                     dcc.Graph(id='treemap', 
-                               config={'displayModeBar': 'hover'}, 
-                               className='dcc_compon', 
-                               style={'margin-top': '20px'})
-
-                ], className="container"),
-
-    ], className="top-row", id='top_row'),
-
-    html.Div([
-        html.Div([
-                    html.P('Stock Prices', className='heading'),
-
-                     dcc.Graph(id='price', 
-                               config={'displayModeBar': False}, 
-                               className='dcc_compon', 
-                               style={'margin-top': '20px'}),
-
-                    ], className="create_container four columns"),
-        html.Div([
-                    html.P('Price Percent Change', className='heading'),
-
-                     dcc.Graph(id='per_change', 
-                               config={'displayModeBar': False}, 
-                               className='dcc_compon', 
-                               style={'margin-top': '20px'}),
-
-                    ], className="create_container four columns"),
-        html.Div([
-                    html.P('Stock Volume (Millions)', className='heading'),
-
-                     dcc.Graph(id='volume', 
-                               config={'displayModeBar': False}, 
-                               className='dcc_compon', 
-                               style={'margin-top': '20px'}),
-
-                    ], className="create_container four columns"),
-   
-    ], className="row flex-display")
 ])
-
 
 # FETCH NEW DATA ---------------------------
 '''
@@ -122,7 +106,7 @@ def update_output():
 
 @app.callback(
         Output(component_id='companies_list', component_property='figure'),
-        Input(component_id='dropdown', component_property='value')
+        Input(component_id='select_sector', component_property='value')
 )
 
 def update_companies_list(sector):
@@ -152,8 +136,8 @@ def update_companies_list(sector):
 # TREE MAP --------------------------------
 
 @app.callback(
-    Output(component_id='treemap', component_property='figure'),
-    Input(component_id='dropdown', component_property='value')
+    Output(component_id='sector_treemap', component_property='figure'),
+    Input(component_id='select_sector', component_property='value')
 )
 
 def update_tree(sector):
@@ -161,21 +145,18 @@ def update_tree(sector):
     fig = px.treemap(filtered_tree, 
                  path=['Name'], 
                  values='Market Weight',
-                 title='',
-                 width=800, height=500,
-                 color='Market Weight'
+                 title=''
                  )
     fig.data[0].textinfo = 'label+text+value'
-    #fig.data[0]['textfont']['color'] = 'white'
+    fig.data[0]['textfont']['color'] = 'white'
     
     fig.update_traces(textfont_size=15, 
                            textposition='middle center',
-                           hovertemplate='<b>%{label}</b><br>Market Weight: %{value}',
+                           hovertemplate='<b>%{label}</b><br>Market Weight (%): %{value}',
                            marker_line_width = 0,
                            root_color="#1f2c56")
     
-    fig.update_layout(margin=dict(l=0,r=0,b=0,t=0),
-                           paper_bgcolor="#1f2c56")
+    fig.update_layout(margin=dict(l=0,r=0,b=0,t=0), paper_bgcolor="#1f2c56")
     
     fig.update(layout_coloraxis_showscale=False)
 
@@ -185,16 +166,14 @@ def update_tree(sector):
 
 @app.callback(
         Output(component_id='price', component_property='figure'),
-        Input(component_id='dropdown', component_property='value')
+        Input(component_id='select_sector', component_property='value')
 )
 
 def update_price(sector):
     filtered_stocks = stocks[stocks['Sector']==sector]
 
     fig = px.histogram(filtered_stocks, x='Price',
-                       color_discrete_sequence=['purple'],
-                       width=600,
-                       height=400)
+                       color_discrete_sequence=['purple'])
 
     fig.update_layout(
         xaxis_title_text='', 
@@ -210,16 +189,14 @@ def update_price(sector):
 
 @app.callback(
         Output(component_id='per_change', component_property='figure'),
-        Input(component_id='dropdown', component_property='value')
+        Input(component_id='select_sector', component_property='value')
 )
 
 def update_per_change(sector):
     filtered_stocks = stocks[stocks['Sector']==sector]
 
     fig = px.histogram(filtered_stocks, x='Percent Change',
-                       color_discrete_sequence=['purple'],
-                       width=600,
-                       height=400)
+                       color_discrete_sequence=['purple'])
 
     fig.update_layout(
         xaxis_title_text='', 
@@ -235,16 +212,14 @@ def update_per_change(sector):
 
 @app.callback(
         Output(component_id='volume', component_property='figure'),
-        Input(component_id='dropdown', component_property='value')
+        Input(component_id='select_sector', component_property='value')
 )
 
 def update_volume(sector):
     filtered_stocks = stocks[stocks['Sector']==sector]
 
     fig = px.histogram(filtered_stocks, x='Volume',
-                       color_discrete_sequence=['purple'],
-                       width=600,
-                       height=400)
+                       color_discrete_sequence=['purple'])
 
     fig.update_layout(
         xaxis_title_text='', 

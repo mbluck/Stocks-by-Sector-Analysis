@@ -2,16 +2,3 @@ To Do:
 
 fix stock data scraping
 add update button functionality 
-
-fix styling 
-  - make page top margin smaller so entire dashboard is visible at once
-  - center the top row of containers
-  - properly align headers
-  - title font size
-  - "Select sector" fontsize
-
-
-container alignment:
-https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout/Aligning_items_in_a_flex_container
-
-flexbox sizing:
