@@ -1,4 +1,0 @@
-To Do:
-
-fix stock data scraping
-add update button functionality 

@@ -1,0 +1,43 @@
+            html.Footer(
+                [
+                html.Div([
+                    html.Div(
+                        [
+                            html.H2(
+                                "Melanie Bluck", className="footer_text", id='footer_heading'
+                            ),
+                            html.H2("Check me out:", className="footer_text", id='footer_subheading'),
+                        ],
+                        className="footer_text_container",
+                    ),
+
+                    html.A(
+                        href="https://mbluck.github.io/portfolio/",
+                        target="_blank",
+                        rel="noopener noreferrer",
+                        children=[
+                            html.Img(
+                                alt="Link to my website",
+                                src="assets/footer/me.png",
+                                className="footer_img",
+                            )
+                        ],
+                        className="img_container",
+                    ),
+
+                    html.A(
+                        href="https://github.com/mbluck/Stocks-by-Sector-Analysis",
+                        target="_blank",
+                        rel="noopener noreferrer",
+                        children=[
+                            html.Img(
+                                alt="Link to Github",
+                                src="assets/footer/github.png",
+                                className="footer_img",
+                            )
+                        ],
+                        className="img_container",
+                    ),
+                ], className='footer_content'
+            ),
+            ])
