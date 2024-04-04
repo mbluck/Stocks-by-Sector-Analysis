@@ -14,7 +14,9 @@ companies = pd.read_csv("data/companies.csv")
 
 app = Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 server = app.server
-server.wsgi_app = WhiteNoise(server.wsgi_app, root='static/') #allows heroku to serve static files
+server.wsgi_app = WhiteNoise(
+    server.wsgi_app, root="static/"
+)  # allows heroku to serve static files
 
 # setting app.layout = to this function instance allows for the layout to be updated upon every page load, enabling scheduled data updates
 def serve_layout():
@@ -139,7 +141,16 @@ def serve_layout():
                                 min=0,
                                 max=1,
                                 step=0.01,
-                                marks=None,
+                                marks={
+                                    0: {
+                                        "label": "Zoom In",
+                                        "style": {"color": "white"},
+                                    },
+                                    1: {
+                                        "label": "Zoom Out",
+                                        "style": {"color": "white"},
+                                    },
+                                },
                                 tooltip={
                                     "placement": "bottom",
                                     "always_visible": True,
@@ -152,7 +163,7 @@ def serve_layout():
                         className="slider_container",
                     ),
                 ]
-            )
+            ),
         ]
     )
 
