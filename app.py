@@ -13,6 +13,7 @@ companies = pd.read_csv("data/companies.csv")
 # APP LAYOUT -------------------------------------------------
 
 app = Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}])
+server = app.server
 
 # setting app.layout = to this function instance allows for the layout to be updated upon every page load, enabling scheduled data updates
 def serve_layout():
