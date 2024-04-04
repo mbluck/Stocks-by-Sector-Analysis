@@ -1,5 +1,5 @@
-# import getData
 from dash import Dash, html, dcc, Input, Output
+from whitenoise import WhiteNoise
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -14,6 +14,7 @@ companies = pd.read_csv("data/companies.csv")
 
 app = Dash(__name__, meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 server = app.server
+server.wsgi_app = WhiteNoise(server.wsgi_app, root='static/') #allows heroku to serve static files
 
 # setting app.layout = to this function instance allows for the layout to be updated upon every page load, enabling scheduled data updates
 def serve_layout():
