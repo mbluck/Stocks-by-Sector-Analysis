@@ -1,8 +1,8 @@
-dash==2.15.0
-pandas==1.4.2
-xlrd==2.0.1
-plotly==5.6.0
+dash==2.14.2
+pandas==2.2.3
+xlrd==2.0.2
+plotly==6.0.1
 yahoo_fin==0.8.9.1
-yfinance==0.2.37
-gunicorn==21.2.0
-whitenoise==6.6.0
+yfinance==0.2.64
+gunicorn==23.0.0
+whitenoise==6.9.0
